@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tipo Contato.
+ */
 public class Contato {
 
     private static Long proximoId = 1L;
@@ -14,6 +17,11 @@ public class Contato {
         this.telefones = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param nome      o nome
+     * @param sobreNome o sobrenome
+     */
     public Contato(String nome, String sobreNome) {
         this.id = proximoId++;
         this.nome = nome;
@@ -40,6 +48,7 @@ public class Contato {
     public void setSobreNome(String sobreNome) {
         this.sobreNome = sobreNome;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -52,6 +61,12 @@ public class Contato {
         this.telefones = telefones;
     }
 
+    /**
+     * Verificar telefone em todos contatos boolean.
+     *
+     * @param telefone o telefone
+     * @return o boolean
+     */
     public static boolean verificar_telefone_em_todos_contatos(Telefone telefone) {
         for (Contato contato : Agenda.contatos) {
             if (contato.verificar_telefone_existe(telefone)) {
@@ -61,6 +76,12 @@ public class Contato {
         return false;
     }
 
+    /**
+     * Verificar se telefone existe boolean.
+     *
+     * @param telefone o telefone
+     * @return o boolean
+     */
     public boolean verificar_telefone_existe(Telefone telefone) {
         for (Telefone telefoneExistente : telefones) {
             if (telefoneExistente.equals(telefone)) {
@@ -70,7 +91,12 @@ public class Contato {
         return false;
     }
 
-    
+
+    /**
+     * Adicionar telefone.
+     *
+     * @param telefone o telefone
+     */
     public void adicionar_telefone(Telefone telefone) {
         try {
             if (verificar_telefone_em_todos_contatos(telefone)) {

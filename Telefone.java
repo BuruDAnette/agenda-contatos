@@ -1,13 +1,21 @@
 import java.util.Objects;
 
+/**
+ * Tipo Telefone.
+ */
 public class Telefone {
     private Long id;
     private String ddd;
     private Long numero;
-    
+
     public Telefone() {
     }
-    
+
+    /**
+     *
+     * @param ddd    o ddd
+     * @param numero o numero
+     */
     public Telefone(String ddd, Long numero) {
         this.ddd = ddd;
         this.numero = numero;

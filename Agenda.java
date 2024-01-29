@@ -8,12 +8,16 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Tipo Agenda.
+ */
 public class Agenda {
     static List<Contato> contatos;
 
-    //------------------------------CORES------------------------------//
+
+//------------------------------CORES------------------------------//
     public static final String RESET = "\033[0m";
-    public static final String RED_BOLD = "\033[1;31m"; 
+    public static final String RED_BOLD = "\033[1;31m";
     public static final String GREEN_BOLD = "\033[1;32m";
     public static final String BLACK_BOLD = "\033[1;30m";
     public static final String PURPLE_BOLD = "\033[1;35m";
@@ -33,13 +37,16 @@ public class Agenda {
         Agenda.contatos = new ArrayList<>();
     }
 
+    /**
+     * Leitor arquivo.
+     */
     public void leitor_arquivo() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
             String linha;
 
             while ((linha = bufferedReader.readLine()) != null) {
                 if (linha.equals("=====================================")) {
-                    continue; // Ignora linhas de separação
+                    continue;
                 }
 
                 String[] partes = linha.split("\\|");
@@ -51,9 +58,9 @@ public class Agenda {
                 Contato contato = new Contato(nome, sobrenome);
                 contato.setId(id);
 
-                linha = bufferedReader.readLine(); // Pular linha em branco
+                linha = bufferedReader.readLine();
 
-                // Tratar a primeira linha de telefone
+                
                 String ddd = linha.substring(linha.indexOf("(") + 1, linha.indexOf(")"));
                 String numeroStr = linha.substring(linha.indexOf(")") + 1).trim();
                 Long numero = Long.parseLong(numeroStr);
@@ -61,7 +68,6 @@ public class Agenda {
                 Telefone telefone = new Telefone(ddd, numero);
                 contato.adicionar_telefone(telefone);
 
-                // Continuar a leitura dos telefones
                 while (!(linha = bufferedReader.readLine()).equals("=====================================")) {
                     ddd = linha.substring(linha.indexOf("(") + 1, linha.indexOf(")"));
                     numeroStr = linha.substring(linha.indexOf(")") + 1).trim();
@@ -81,6 +87,9 @@ public class Agenda {
     }
 
 
+    /**
+     * Escritor arquivo.
+     */
     public void escritor_arquivo() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Contato contato : contatos) {
@@ -284,9 +293,11 @@ public class Agenda {
         }
         return telefoneExistente;
     }
-    
-    
-    
+
+
+    /**
+     * Listar contatos.
+     */
     public void listar_contatos() {
         System.out.println(BLACK_BOLD + "          SUA AGENDA         " + RESET);
         for (Contato contato : contatos) {
@@ -318,6 +329,12 @@ public class Agenda {
         System.out.print("\nDIGITE O " + BLACK_BOLD + "NUMERO" + RESET + " DO COMANDO: ");
     }
 
+    /**
+     * O ponto de entrada da aplicacao.
+     *
+     * @param args argumentos do input
+     * @throws IOException exceção
+     */
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         Agenda agenda = new Agenda();
