@@ -52,16 +52,16 @@ public class Contato {
         this.telefones = telefones;
     }
 
-    public static boolean verificarTelefoneExistenteEmTodosOsContatos(Telefone telefone) {
+    public static boolean verificar_telefone_em_todos_contatos(Telefone telefone) {
         for (Contato contato : Agenda.contatos) {
-            if (contato.verificarTelefoneExistente(telefone)) {
+            if (contato.verificar_telefone_existe(telefone)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean verificarTelefoneExistente(Telefone telefone) {
+    public boolean verificar_telefone_existe(Telefone telefone) {
         for (Telefone telefoneExistente : telefones) {
             if (telefoneExistente.equals(telefone)) {
                 return true;
@@ -71,22 +71,19 @@ public class Contato {
     }
 
     
-    public void adicionarTelefone(Telefone telefone) {
-        // Check if the phone number is already registered in any contact
+    public void adicionar_telefone(Telefone telefone) {
         try {
-            if (verificarTelefoneExistenteEmTodosOsContatos(telefone)) {
+            if (verificar_telefone_em_todos_contatos(telefone)) {
                 throw new IllegalArgumentException("Telefone já cadastrado em algum contato");
             }
     
-            // Check if the phone number is already registered in this contact
-            if (verificarTelefoneExistente(telefone)) {
+            if (verificar_telefone_em_todos_contatos(telefone)) {
                 throw new IllegalArgumentException("Telefone já cadastrado neste contato");
             }
     
             telefones.add(telefone);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            // Handle the exception as needed (print a message or display an error)
         }
     }
 }

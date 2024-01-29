@@ -33,7 +33,7 @@ public class Agenda {
         Agenda.contatos = new ArrayList<>();
     }
 
-    public void lerArquivo() {
+    public void leitor_arquivo() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_NAME))) {
             String linha;
 
@@ -59,7 +59,7 @@ public class Agenda {
                 Long numero = Long.parseLong(numeroStr);
 
                 Telefone telefone = new Telefone(ddd, numero);
-                contato.adicionarTelefone(telefone);
+                contato.adicionar_telefone(telefone);
 
                 // Continuar a leitura dos telefones
                 while (!(linha = bufferedReader.readLine()).equals("=====================================")) {
@@ -68,7 +68,7 @@ public class Agenda {
                     numero = Long.parseLong(numeroStr);
 
                     telefone = new Telefone(ddd, numero);
-                    contato.adicionarTelefone(telefone);
+                    contato.adicionar_telefone(telefone);
                 }
 
                 contatos.add(contato);
@@ -81,7 +81,7 @@ public class Agenda {
     }
 
 
-    public void escreverArquivo() {
+    public void escritor_arquivo() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Contato contato : contatos) {
                 bufferedWriter.write(contato.getId() + " | " + contato.getNome() + " " + contato.getSobreNome());
@@ -99,7 +99,7 @@ public class Agenda {
         }
     }
     
-    private void criarContato(Scanner scanner) {
+    private void criar_contato(Scanner scanner) {
         //-------------------------NOME-E-SOBRENOME------------------------//
         System.out.println("DIGITE UM " + BLACK_BOLD + "NOME " + RESET + "PARA ESSE CONTATO: ");
         String nome = scanner.next();
@@ -121,17 +121,17 @@ public class Agenda {
                 Long numero = scanner.nextLong();
     
                 Telefone telefone = new Telefone(ddd, numero);
-                if (Contato.verificarTelefoneExistenteEmTodosOsContatos(telefone)) {
+                if (Contato.verificar_telefone_em_todos_contatos(telefone)) {
                     throw new IllegalArgumentException(TELEFONE_JA_EXISTE);
                 }
 
-                novoContato.adicionarTelefone(telefone);
+                novoContato.adicionar_telefone(telefone);
             }
     
             contatos.add(novoContato);
             System.out.println(MENSAGEM_CONTATO_CRIADO);
     
-            escreverArquivo();
+            escritor_arquivo();
     
         } catch (IllegalArgumentException e) {
             System.out.println(RED_BOLD + "ERRO: " + e.getMessage() + RESET);
@@ -139,29 +139,29 @@ public class Agenda {
     }
     
 
-    private void removerContato(Scanner scanner) {
+    private void remover_contato(Scanner scanner) {
         if (contatos.isEmpty()) {
             System.out.println(RED_BOLD +"AGENDA VAZIA!" + RESET + "\n");
         } else {
-            listarContatos();
+            listar_contatos();
 
             System.out.print("DIGITE O " + BLACK_BOLD + "ID " + RESET + "DO CONTATO A SER EXCLUIDO: ");
             try {
-                Long idRemover = scanner.nextLong();
+                Long id_remover = scanner.nextLong();
         
-                Contato contatoRemover = null;
+                Contato contato_remover = null;
                 for (Contato contato : contatos) {
-                    if (contato.getId().equals(idRemover)) {
-                        contatoRemover = contato;
+                    if (contato.getId().equals(id_remover)) {
+                        contato_remover = contato;
                         break;
                     }
                 }
         
-                if (contatoRemover != null) {
-                    contatos.remove(contatoRemover);
+                if (contato_remover != null) {
+                    contatos.remove(contato_remover);
                     System.out.println(MENSAGEM_CONTATO_REMOVIDO);
                     
-                    escreverArquivo();
+                    escritor_arquivo();
                 } else {
                     System.out.println(ID_NAO_ENCONTRADO);
                 }
@@ -173,59 +173,59 @@ public class Agenda {
         }
     }
 
-    private void editarContato(Scanner scanner) {
+    private void editar_contato(Scanner scanner) {
         if (contatos.isEmpty()) {
             System.out.println(RED_BOLD +"AGENDA VAZIA!" + RESET + "\n");
         } else {
-            listarContatos();
+            listar_contatos();
     
             System.out.print("DIGITE O " + BLACK_BOLD + "ID " + RESET + "DO CONTATO A SER EDITADO: ");
-            Long idEditar = scanner.nextLong();
+            Long id_editar = scanner.nextLong();
             
-            Contato contatoEditar = null;
+            Contato contato_editar = null;
             for (Contato contato : contatos) {
-                if (contato.getId().equals(idEditar)) {
-                contatoEditar = contato;
+                if (contato.getId().equals(id_editar)) {
+                contato_editar = contato;
                 break;
                 }
             }
             
-            if (contatoEditar != null) {
+            if (contato_editar != null) {
                 System.out.println(BLACK_BOLD + "     COMANDOS PARA EDITAR    \n");
                 System.out.println(" 1  " + RESET + " NOME");
                 System.out.println(BLACK_BOLD + " 2  " + RESET + " SOBRENOME");
                 System.out.println(BLACK_BOLD + " 3  " + RESET + " TELEFONES");
                 System.out.print("\nDIGITE O " + BLACK_BOLD + "NUMERO" + RESET + " DO COMANDO: ");
-                int opcaoEditar = scanner.nextInt();
+                int comando_editar = scanner.nextInt();
             
-                switch (opcaoEditar) {
+                switch (comando_editar) {
                     case 1:
                         System.out.println(PURPLE_BACKGROUND + "         EDITAR NOME         " + RESET + "\n");
                         System.out.println("DIGITE UM NOVO " + BLACK_BOLD + "NOME " + RESET + "PARA ESSE CONTATO: ");
-                        String novoNome = scanner.next();
-                        contatoEditar.setNome(novoNome);
+                        String novo_nome = scanner.next();
+                        contato_editar.setNome(novo_nome);
                         System.out.println(MENSAGEM_CONTATO_EDITADO);
                         break;
                     case 2:
                         System.out.println(PURPLE_BACKGROUND + "       EDITAR SOBRENOME      " + RESET + "\n");
                         System.out.println("DIGITE UM NOVO " + BLACK_BOLD + "SOBRENOME " + RESET + "PARA ESSE CONTATO: ");
-                        String novoSobrenome = scanner.next();
-                        contatoEditar.setSobreNome(novoSobrenome);
+                        String novo_sobrenome = scanner.next();
+                        contato_editar.setSobreNome(novo_sobrenome);
                         System.out.println(MENSAGEM_CONTATO_EDITADO);
                         break;
                     case 3:
                         System.out.println(PURPLE_BACKGROUND + "       EDITAR TELEFONES      " + RESET + "\n");        
                         System.out.print("DIGITE A " + BLACK_BOLD + "POSICAO " + RESET + "DO TELEFONE A SER EDITADO: ");
                         try {
-                            int escolhaTelefone = scanner.nextInt();
+                            int telefone_editar = scanner.nextInt();
                             scanner.nextLine();
         
-                            if (escolhaTelefone >= 1 && escolhaTelefone <= contatoEditar.getTelefones().size()) {
-                                Telefone telefoneEditado = editarTelefone(scanner, contatoEditar.getTelefones().get(escolhaTelefone - 1));
-                                if (Contato.verificarTelefoneExistenteEmTodosOsContatos(telefoneEditado)) {
+                            if (telefone_editar >= 1 && telefone_editar <= contato_editar.getTelefones().size()) {
+                                Telefone telefone_editado = editar_telefone(scanner, contato_editar.getTelefones().get(telefone_editar - 1));
+                                if (Contato.verificar_telefone_em_todos_contatos(telefone_editado)) {
                                     throw new IllegalArgumentException(TELEFONE_JA_EXISTE);
                                 }
-                                contatoEditar.getTelefones().set(escolhaTelefone - 1, telefoneEditado);
+                                contato_editar.getTelefones().set(telefone_editar - 1, telefone_editado);
                                 System.out.println(MENSAGEM_CONTATO_EDITADO);
                             } else {
                                 System.out.println(MENSAGEM_OPCAO_INVALIDA);
@@ -238,7 +238,7 @@ public class Agenda {
                     default:
                     System.out.println(MENSAGEM_OPCAO_INVALIDA);
                 }
-                escreverArquivo();
+                escritor_arquivo();
                 
             } else {
             System.out.println(ID_NAO_ENCONTRADO);
@@ -246,10 +246,10 @@ public class Agenda {
         }
     }
 
-    private Telefone editarTelefone(Scanner scanner, Telefone telefoneExistente) {
-        boolean validInput = false;
+    private Telefone editar_telefone(Scanner scanner, Telefone telefoneExistente) {
+        boolean input = false;
     
-        while (!validInput) {
+        while (!input) {
             System.out.println("TELEFONE A SER EDITADO: " + BLACK_BOLD + "(" + telefoneExistente.getDdd() + ") " + telefoneExistente.getNumero() + RESET);
             System.out.println(BLACK_BOLD + "     COMANDOS PARA EDITAR    \n");
             System.out.println(" 1  " + RESET + " DDD");
@@ -257,23 +257,23 @@ public class Agenda {
             System.out.print("\nDIGITE O " + BLACK_BOLD + "NUMERO" + RESET + " DO COMANDO: ");
     
             try {
-                int escolhaEdicao = scanner.nextInt();
+                int comando_editar2 = scanner.nextInt();
                 scanner.nextLine(); // Consumir a quebra de linha
     
-                switch (escolhaEdicao) {
+                switch (comando_editar2) {
                     case 1:
                         System.out.println(PURPLE_BACKGROUND + "         EDITAR DDD          " + RESET + "\n");
                         System.out.print("DIGITE UM NOVO " + BLACK_BOLD + "DDD " + RESET + "PARA ESSE TELEFONE: ");
-                        String novoDdd = scanner.next();
-                        telefoneExistente.setDdd(novoDdd);
-                        validInput = true;
+                        String novo_ddd = scanner.next();
+                        telefoneExistente.setDdd(novo_ddd);
+                        input = true;
                         break;
                     case 2:
                         System.out.println(PURPLE_BACKGROUND + "         EDITAR NUMERO       " + RESET + "\n");
                         System.out.print("DIGITE UM NOVO " + BLACK_BOLD + "NUMERO " + RESET + "PARA ESSE TELEFONE: ");
-                        Long novoNumero = scanner.nextLong();
-                        telefoneExistente.setNumero(novoNumero);
-                        validInput = true;
+                        Long novo_numero = scanner.nextLong();
+                        telefoneExistente.setNumero(novo_numero);
+                        input = true;
                         break;
                     default:
                         System.out.println(MENSAGEM_OPCAO_INVALIDA);
@@ -287,7 +287,7 @@ public class Agenda {
     
     
     
-    public void listarContatos() {
+    public void listar_contatos() {
         System.out.println(BLACK_BOLD + "          SUA AGENDA         " + RESET);
         for (Contato contato : contatos) {
             System.out.print("ID: " + contato.getId() + " | ");
@@ -307,7 +307,7 @@ public class Agenda {
     }
     
 
-    private static void imprimirMenu() {
+    private static void imprimir_menu() {
         System.out.println(" ");
         System.out.println(BLACK_BOLD + "       MENU DE COMANDOS      \n");
         System.out.println(" 1  " + RESET + " ADICIONAR CONTATO");
@@ -324,25 +324,25 @@ public class Agenda {
 
         System.out.println(MENSAGEM_BEM_VINDO);
 
-        agenda.lerArquivo();
+        agenda.leitor_arquivo();
 
         while (true) {
-            imprimirMenu();
+            imprimir_menu();
 
-            int opcao = scanner.nextInt();
+            int comando = scanner.nextInt();
 
-            switch (opcao) {
+            switch (comando) {
                 case 1:
                     System.out.println(PURPLE_BACKGROUND + "      ADICIONAR CONTATO      " + RESET + "\n");
-                    agenda.criarContato(scanner);
+                    agenda.criar_contato(scanner);
                     break;
                 case 2:
                     System.out.println(PURPLE_BACKGROUND + "       REMOVER CONTATO       " + RESET + "\n");
-                    agenda.removerContato(scanner);
+                    agenda.remover_contato(scanner);
                     break;
                 case 3:
                     System.out.println(PURPLE_BACKGROUND + "       EDITAR CONTATO        " + RESET + "\n");
-                    agenda.editarContato(scanner);
+                    agenda.editar_contato(scanner);
                     break;
                 //case 4:
                     //System.out.println(PURPLE_BACKGROUND + "       LISTAR CONTATOS       " + RESET + "\n");
