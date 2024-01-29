@@ -219,9 +219,12 @@ public class Agenda {
                         try {
                             int escolhaTelefone = scanner.nextInt();
                             scanner.nextLine();
-                            
+        
                             if (escolhaTelefone >= 1 && escolhaTelefone <= contatoEditar.getTelefones().size()) {
                                 Telefone telefoneEditado = editarTelefone(scanner, contatoEditar.getTelefones().get(escolhaTelefone - 1));
+                                if (Contato.verificarTelefoneExistenteEmTodosOsContatos(telefoneEditado)) {
+                                    throw new IllegalArgumentException(TELEFONE_JA_EXISTE);
+                                }
                                 contatoEditar.getTelefones().set(escolhaTelefone - 1, telefoneEditado);
                                 System.out.println(MENSAGEM_CONTATO_EDITADO);
                             } else {
@@ -244,41 +247,44 @@ public class Agenda {
     }
 
     private Telefone editarTelefone(Scanner scanner, Telefone telefoneExistente) {
-        System.out.println("TELEFONE A SER EDITADO: (" + telefoneExistente.getDdd() + ") " + telefoneExistente.getNumero());
+        boolean validInput = false;
     
-        System.out.println(BLACK_BOLD + "     COMANDOS PARA EDITAR    \n");
-        System.out.println(" 1  " + RESET + " DDD");
-        System.out.println(BLACK_BOLD + " 2  " + RESET + " NUMERO");
-        System.out.print("\nDIGITE O " + BLACK_BOLD + "NUMERO" + RESET + " DO COMANDO: ");
+        while (!validInput) {
+            System.out.println("TELEFONE A SER EDITADO: " + BLACK_BOLD + "(" + telefoneExistente.getDdd() + ") " + telefoneExistente.getNumero() + RESET);
+            System.out.println(BLACK_BOLD + "     COMANDOS PARA EDITAR    \n");
+            System.out.println(" 1  " + RESET + " DDD");
+            System.out.println(BLACK_BOLD + " 2  " + RESET + " NUMERO");
+            System.out.print("\nDIGITE O " + BLACK_BOLD + "NUMERO" + RESET + " DO COMANDO: ");
     
-        try {
-            int escolhaEdicao = scanner.nextInt();
-            scanner.nextLine(); // Consumir a quebra de linha
+            try {
+                int escolhaEdicao = scanner.nextInt();
+                scanner.nextLine(); // Consumir a quebra de linha
     
-            switch (escolhaEdicao) {
-                case 1:
-                    System.out.println(PURPLE_BACKGROUND + "         EDITAR DDD          " + RESET + "\n");
-                    System.out.print("DIGITE UM NOVO " + BLACK_BOLD + "DDD " + RESET + "PARA ESSE TELEFONE: ");
-                    String novoDdd = scanner.next();
-                    telefoneExistente.setDdd(novoDdd);
-                    break;
-                case 2:
-                    System.out.println(PURPLE_BACKGROUND + "         EDITAR NUMERO       " + RESET + "\n");
-                    System.out.print("DIGITE UM NOVO " + BLACK_BOLD + "NUMERO " + RESET + "PARA ESSE TELEFONE: ");
-                    Long novoNumero = scanner.nextLong();
-                    telefoneExistente.setNumero(novoNumero);
-                    break;
-                default:
-                    System.out.println(MENSAGEM_OPCAO_INVALIDA);
+                switch (escolhaEdicao) {
+                    case 1:
+                        System.out.println(PURPLE_BACKGROUND + "         EDITAR DDD          " + RESET + "\n");
+                        System.out.print("DIGITE UM NOVO " + BLACK_BOLD + "DDD " + RESET + "PARA ESSE TELEFONE: ");
+                        String novoDdd = scanner.next();
+                        telefoneExistente.setDdd(novoDdd);
+                        validInput = true;
+                        break;
+                    case 2:
+                        System.out.println(PURPLE_BACKGROUND + "         EDITAR NUMERO       " + RESET + "\n");
+                        System.out.print("DIGITE UM NOVO " + BLACK_BOLD + "NUMERO " + RESET + "PARA ESSE TELEFONE: ");
+                        Long novoNumero = scanner.nextLong();
+                        telefoneExistente.setNumero(novoNumero);
+                        validInput = true;
+                        break;
+                    default:
+                        System.out.println(MENSAGEM_OPCAO_INVALIDA);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(MENSAGEM_OPCAO_INVALIDA); 
             }
-    
-        } catch (InputMismatchException e) {
-            System.out.println(MENSAGEM_OPCAO_INVALIDA);
-            scanner.nextLine(); // Consumir a entrada inválida
         }
-    
         return telefoneExistente;
     }
+    
     
     
     public void listarContatos() {

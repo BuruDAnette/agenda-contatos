@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Telefone {
     private Long id;
     private String ddd;
@@ -29,5 +31,13 @@ public class Telefone {
 
     public void setNumero(Long numero) {
         this.numero = numero;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Telefone telefone = (Telefone) obj;
+        return Objects.equals(ddd, telefone.ddd) && Objects.equals(numero, telefone.numero);
     }
 }
