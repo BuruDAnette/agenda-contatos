@@ -7,7 +7,7 @@ public class Contato {
     private String nome;
     private String sobreNome;
     private List<Telefone> telefones;
-    private static Long proximoId = 1L;
+    private Long proximoId = 1L;
 
     public Contato() {
         this.telefones = new ArrayList<>();
@@ -15,9 +15,10 @@ public class Contato {
     }
 
     public Contato(String nome, String sobreNome) {
-        this();
+        this.id = proximoId++;
         this.nome = nome;
         this.sobreNome = sobreNome;
+        this.telefones = new ArrayList<>();
     }
 
     public Long getId() {
@@ -38,6 +39,9 @@ public class Contato {
 
     public void setSobreNome(String sobreNome) {
         this.sobreNome = sobreNome;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<Telefone> getTelefones() {
@@ -79,9 +83,5 @@ public class Contato {
             System.out.println(e.getMessage());
             // Exibe o menu novamente
         }
-    }
-
-    public static Long proximoId() {
-        return proximoId++;
     }
 }
